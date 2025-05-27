@@ -18,7 +18,7 @@ export const fetchUsers = async (
   size: number,
   sorting: SortingState,
 ): Promise<UsersResponse> => {
-  const response = await api.get("/usersMedium", {
+  const response = await api.get("/usersShort", {
     params: {
       _start: start,
       _limit: size,

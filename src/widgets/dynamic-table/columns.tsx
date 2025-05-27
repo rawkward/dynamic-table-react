@@ -7,20 +7,22 @@ export const generateColumns = (
 ): ColumnDef<User>[] => {
   if (!sampleData) return [];
 
-  return Object.keys(sampleData).map((key) => {
-    const column: ColumnDef<User> = {
-      accessorKey: key,
-      header: formatHeader(key),
-      size: getColumnWidth(key),
-      enableSorting: true,
-      cell: ({ row }) => {
-        const value = row.getValue(key);
-        return formatCellValue(key, value as string | number | Date);
-      },
-    };
+  return Object.keys(sampleData)
+    .filter((key) => !"id".includes(key))
+    .map((key) => {
+      const column: ColumnDef<User> = {
+        accessorKey: key,
+        header: formatHeader(key),
+        size: getColumnWidth(key),
+        enableSorting: true,
+        cell: ({ row }) => {
+          const value = row.getValue(key);
+          return formatCellValue(key, value as string | number | Date);
+        },
+      };
 
-    return column;
-  });
+      return column;
+    });
 };
 
 function formatHeader(key: string): string {
