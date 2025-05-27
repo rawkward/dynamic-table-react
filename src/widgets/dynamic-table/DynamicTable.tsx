@@ -2,7 +2,6 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import {
   getCoreRowModel,
-  getSortedRowModel,
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
@@ -15,14 +14,17 @@ const PAGE_SIZE = 50;
 export const DynamicTable = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const { data, fetchNextPage, isFetching, isLoading } = useInfiniteQuery({
-    queryKey: ["users", sorting],
-    queryFn: ({ pageParam = 0 }) =>
-      fetchUsers(pageParam * PAGE_SIZE, PAGE_SIZE, sorting),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.data.length ? allPages.length : undefined,
-  });
+  const { data, fetchNextPage, isFetching, isLoading, hasNextPage } =
+    useInfiniteQuery({
+      queryKey: ["users", sorting],
+      queryFn: ({ pageParam = 0 }) =>
+        fetchUsers(pageParam * PAGE_SIZE, PAGE_SIZE, sorting),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, allPages) => {
+        if (lastPage.data.length < PAGE_SIZE) return undefined;
+        return allPages.length;
+      },
+    });
 
   const columns = () => generateColumns(data?.pages[0]?.data[0]);
 
@@ -33,7 +35,6 @@ export const DynamicTable = () => {
     columns: columns(),
     state: { sorting },
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     manualSorting: true,
     onSortingChange: setSorting,
   });
@@ -46,6 +47,7 @@ export const DynamicTable = () => {
       totalCount={totalCount}
       isFetching={isFetching}
       isLoading={isLoading}
+      hasNextPage={hasNextPage}
       fetchMore={fetchNextPage}
     />
   );

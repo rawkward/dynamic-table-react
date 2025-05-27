@@ -1,27 +1,30 @@
+import { flexRender, type Row, type Table } from "@tanstack/react-table";
 import { useVirtualizer, type VirtualItem } from "@tanstack/react-virtual";
-import type { Table, Row } from "@tanstack/react-table";
-import { useRef, useEffect } from "react";
-import { flexRender } from "@tanstack/react-table";
 import type { User, UsersResponse } from "@/shared/api/users.ts";
+import { useEffect, useRef } from "react";
 import type {
-  FetchNextPageOptions, InfiniteData,
+  FetchNextPageOptions,
+  InfiniteData,
   InfiniteQueryObserverResult,
 } from "@tanstack/react-query";
 
 type TableVirtualizerProps = {
-  table: Table<User>
-  totalCount: number
-  isFetching: boolean
-  isLoading: boolean
+  table: Table<User>;
+  totalCount: number;
+  isFetching: boolean;
+  isLoading: boolean;
+  hasNextPage?: boolean;
   fetchMore: (
-    options?: FetchNextPageOptions
-  ) => Promise<InfiniteQueryObserverResult<InfiniteData<UsersResponse>>>
+    options?: FetchNextPageOptions,
+  ) => Promise<InfiniteQueryObserverResult<InfiniteData<UsersResponse>>>;
 };
 
 export const TableVirtualizer = ({
   table,
-  totalCount,
+  hasNextPage,
   fetchMore,
+  isFetching,
+  isLoading,
 }: TableVirtualizerProps) => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const { rows } = table.getRowModel();
@@ -39,27 +42,42 @@ export const TableVirtualizer = ({
     const [lastItem] = [...virtualItems].reverse();
     if (!lastItem) return;
 
-    if (lastItem.index >= rows.length - 1 && rows.length < totalCount) {
+    if (lastItem.index >= rows.length - 1 && hasNextPage && !isFetching) {
       fetchMore();
     }
-  }, [virtualItems, rows.length, totalCount, fetchMore]);
+  }, [virtualItems, rows.length, hasNextPage, isFetching, fetchMore]);
+
+  if (isLoading) {
+    return (
+      <div className="h-[600px] flex items-center justify-center">
+        <div>Загрузка...</div>
+      </div>
+    );
+  }
 
   return (
     <div ref={tableContainerRef} className="h-[600px] overflow-auto">
       <table className="w-full">
-        <thead className="sticky top-0 bg-white">
+        <thead className="sticky top-0 bg-white z-10">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="text-left p-4 border-b"
+                  className="text-left p-4 border-b bg-gray-50 cursor-pointer hover:bg-gray-100"
                   style={{ width: header.getSize() }}
+                  onClick={header.column.getToggleSortingHandler()}
                 >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext(),
-                  )}
+                  <div className="flex items-center gap-2">
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+                    {{
+                      asc: " 🔼",
+                      desc: " 🔽",
+                    }[header.column.getIsSorted() as string] ?? null}
+                  </div>
                 </th>
               ))}
             </tr>
@@ -81,6 +99,7 @@ export const TableVirtualizer = ({
                   transform: `translateY(${virtualRow.start}px)`,
                   width: "100%",
                 }}
+                className="hover:bg-gray-50"
               >
                 {row.getVisibleCells().map((cell) => (
                   <td
@@ -96,6 +115,12 @@ export const TableVirtualizer = ({
           })}
         </tbody>
       </table>
+
+      {isFetching && (
+        <div className="p-4 text-center">
+          <div>Загружаем еще данные...</div>
+        </div>
+      )}
     </div>
   );
 };
