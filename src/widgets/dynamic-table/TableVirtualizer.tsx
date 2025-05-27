@@ -1,12 +1,23 @@
-import { flexRender, type Row, type Table } from "@tanstack/react-table";
 import { useVirtualizer, type VirtualItem } from "@tanstack/react-virtual";
+import type { Table, Row } from "@tanstack/react-table";
+import { useRef, useEffect } from "react";
+import { flexRender } from "@tanstack/react-table";
 import type { User, UsersResponse } from "@/shared/api/users.ts";
-import { useEffect, useRef } from "react";
 import type {
   FetchNextPageOptions,
   InfiniteData,
   InfiniteQueryObserverResult,
 } from "@tanstack/react-query";
+import {
+  Table as ShadcnTable,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/shared/ui/components/Table/table.tsx";
+import { ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
+import { Button } from "@/shared/ui/components/Button/button";
 
 type TableVirtualizerProps = {
   table: Table<User>;
@@ -21,10 +32,11 @@ type TableVirtualizerProps = {
 
 export const TableVirtualizer = ({
   table,
-  hasNextPage,
+  totalCount,
   fetchMore,
-  isFetching,
   isLoading,
+  hasNextPage,
+  isFetching,
 }: TableVirtualizerProps) => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const { rows } = table.getRowModel();
@@ -49,73 +61,108 @@ export const TableVirtualizer = ({
 
   if (isLoading) {
     return (
-      <div className="h-[600px] flex items-center justify-center">
-        <div>Загрузка...</div>
+      <div className="flex items-center justify-center h-64">
+        <div className="text-muted-foreground">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div ref={tableContainerRef} className="h-[600px] overflow-auto">
-      <table className="w-full">
-        <thead className="sticky top-0 bg-white z-10">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className="text-left p-4 border-b bg-gray-50"
-                  style={{ width: header.getSize() }}
-                >
-                  <div className="flex items-center gap-2">
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody
-          style={{
-            height: `${rowVirtualizer.getTotalSize()}px`,
-            position: "relative",
-          }}
-        >
-          {virtualItems.map((virtualRow: VirtualItem) => {
-            const row = rows[virtualRow.index] as Row<User>;
-            return (
-              <tr
-                key={row.id}
-                style={{
-                  position: "absolute",
-                  transform: `translateY(${virtualRow.start}px)`,
-                  width: "100%",
-                }}
-                className="hover:bg-gray-50"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="p-4 border-b"
-                    style={{ width: cell.column.getSize() }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-
-      {isFetching && (
-        <div className="p-4 text-center">
-          <div>Загружаем еще данные...</div>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between text-sm text-muted-foreground">
+        <div>
+          Showing {rows.length} of {totalCount} users
         </div>
-      )}
+        {isFetching && (
+          <div className="flex items-center gap-2">
+            <div className="animate-spin w-4 h-4 border-2 border-primary border-t-transparent rounded-full" />
+            Loading more...
+          </div>
+        )}
+      </div>
+
+      <div
+        ref={tableContainerRef}
+        className="h-[600px] overflow-auto border rounded-md"
+      >
+        <ShadcnTable>
+          <TableHeader className="sticky top-0 bg-background">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className="relative"
+                    style={{ width: header.getSize() }}
+                  >
+                    {header.isPlaceholder ? null : (
+                      <div
+                        className={
+                          header.column.getCanSort()
+                            ? "flex items-center gap-2 cursor-pointer select-none hover:text-foreground"
+                            : "flex items-center gap-2"
+                        }
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                        {header.column.getCanSort() && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0"
+                          >
+                            {header.column.getIsSorted() === "desc" ? (
+                              <ChevronDown className="h-4 w-4" />
+                            ) : header.column.getIsSorted() === "asc" ? (
+                              <ChevronUp className="h-4 w-4" />
+                            ) : (
+                              <ChevronsUpDown className="h-4 w-4" />
+                            )}
+                          </Button>
+                        )}
+                      </div>
+                    )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody
+            style={{
+              height: `${rowVirtualizer.getTotalSize()}px`,
+              position: "relative",
+            }}
+          >
+            {virtualItems.map((virtualRow: VirtualItem) => {
+              const row = rows[virtualRow.index] as Row<User>;
+              return (
+                <TableRow
+                  key={row.id}
+                  className="absolute w-full hover:bg-muted/50"
+                  style={{
+                    transform: `translateY(${virtualRow.start}px)`,
+                  }}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      style={{ width: cell.column.getSize() }}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </ShadcnTable>
+      </div>
     </div>
   );
 };

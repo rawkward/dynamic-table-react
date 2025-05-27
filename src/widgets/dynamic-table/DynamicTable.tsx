@@ -1,20 +1,35 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
-import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { useState, useMemo } from "react";
+import {
+  getCoreRowModel,
+  type SortingState,
+  useReactTable,
+} from "@tanstack/react-table";
 import { TableVirtualizer } from "./TableVirtualizer";
 import { type User, fetchUsers } from "@/shared/api/users.ts";
 import { generateColumns } from "./columns";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/shared/ui/components/Card/card.tsx";
 
 const PAGE_SIZE = 50;
 
 export const DynamicTable = () => {
-  const { data, fetchNextPage, isFetching, isLoading } = useInfiniteQuery({
-    queryKey: ["users"],
+  const [sorting, setSorting] = useState<SortingState>([]);
+
+  const { data, fetchNextPage, isFetching, isLoading, error, hasNextPage } = useInfiniteQuery({
+    queryKey: ["users", sorting],
     queryFn: ({ pageParam = 0 }) =>
-      fetchUsers(pageParam * PAGE_SIZE, PAGE_SIZE),
+      fetchUsers(pageParam * PAGE_SIZE, PAGE_SIZE, sorting),
     initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.data.length ? allPages.length : undefined,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.data.length < PAGE_SIZE) return undefined;
+      return allPages.length;
+    },
   });
 
   const columns = useMemo(() => {
@@ -28,19 +43,53 @@ export const DynamicTable = () => {
   const table = useReactTable<User>({
     data: flatData,
     columns: columns,
+    state: { sorting },
     getCoreRowModel: getCoreRowModel(),
     manualSorting: true,
+    onSortingChange: setSorting,
+    enableSortingRemoval: true,
   });
 
   const totalCount = data?.pages[0]?.meta.totalRowCount || 0;
 
+  if (error) {
+    return (
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle className="text-destructive">
+            Error Loading Users
+          </CardTitle>
+          <CardDescription>
+            Failed to load user data. Please try again later.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground">
+            {error.message}
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
-    <TableVirtualizer
-      table={table}
-      totalCount={totalCount}
-      isFetching={isFetching}
-      isLoading={isLoading}
-      fetchMore={fetchNextPage}
-    />
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>Users Directory</CardTitle>
+        <CardDescription>
+          Browse and sort through user profiles with infinite scroll
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="p-0">
+        <TableVirtualizer
+          table={table}
+          totalCount={totalCount}
+          isFetching={isFetching}
+          isLoading={isLoading}
+          hasNextPage={hasNextPage}
+          fetchMore={fetchNextPage}
+        />
+      </CardContent>
+    </Card>
   );
 };

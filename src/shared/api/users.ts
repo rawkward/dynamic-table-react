@@ -1,3 +1,4 @@
+import type { SortingState } from "@tanstack/react-table";
 import { api } from "@/shared/api/instance.ts";
 
 export type User = {
@@ -15,11 +16,14 @@ export type UsersResponse = {
 export const fetchUsers = async (
   start: number,
   size: number,
+  sorting: SortingState,
 ): Promise<UsersResponse> => {
   const response = await api.get("/usersMedium", {
     params: {
       _start: start,
       _limit: size,
+      _sort: sorting.map((s) => s.id).join(","),
+      _order: sorting.map((s) => (s.desc ? "desc" : "asc")).join(","),
     },
   });
   return {
