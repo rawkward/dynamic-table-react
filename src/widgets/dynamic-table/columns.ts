@@ -1,7 +1,9 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { User } from "@/shared/api/users.ts";
 
-export const generateColumns = (sampleData: User): ColumnDef<User>[] => {
+export const generateColumns = (
+  sampleData?: Partial<User>,
+): ColumnDef<User>[] => {
   if (!sampleData) return [];
 
   return Object.keys(sampleData).map((key) => ({
@@ -10,10 +12,12 @@ export const generateColumns = (sampleData: User): ColumnDef<User>[] => {
     size: 150,
     cell: ({ row }) => {
       const value = row.getValue(key);
-      if (typeof value === "string" && key.endsWith("_date")) {
-        return new Date(value).toLocaleDateString();
+      const typedValue = value as string | number | Date;
+
+      if (key.endsWith("_date") && typeof typedValue === "string") {
+        return new Date(typedValue).toLocaleDateString();
       }
-      return value?.toString() ?? "";
+      return String(typedValue);
     },
   }));
 };

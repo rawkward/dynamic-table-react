@@ -1,5 +1,5 @@
-import axios from "axios";
 import type { SortingState } from "@tanstack/react-table";
+import { api } from "@/shared/api/instance.ts";
 
 export type User = {
   user_id: number;
@@ -18,7 +18,7 @@ export const fetchUsers = async (
   size: number,
   sorting: SortingState,
 ): Promise<UsersResponse> => {
-  const response = await axios.get("/usersShort", {
+  const response = await api.get("/usersShort", {
     params: {
       _start: start,
       _limit: size,
