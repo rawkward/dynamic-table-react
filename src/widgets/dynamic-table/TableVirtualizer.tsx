@@ -64,19 +64,14 @@ export const TableVirtualizer = ({
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="text-left p-4 border-b bg-gray-50 cursor-pointer hover:bg-gray-100"
+                  className="text-left p-4 border-b bg-gray-50"
                   style={{ width: header.getSize() }}
-                  onClick={header.column.getToggleSortingHandler()}
                 >
                   <div className="flex items-center gap-2">
                     {flexRender(
                       header.column.columnDef.header,
                       header.getContext(),
                     )}
-                    {{
-                      asc: " 🔼",
-                      desc: " 🔽",
-                    }[header.column.getIsSorted() as string] ?? null}
                   </div>
                 </th>
               ))}
