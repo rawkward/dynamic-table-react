@@ -85,22 +85,24 @@ export const TableVirtualizer = ({
         ref={tableContainerRef}
         className="h-[600px] overflow-auto border rounded-md"
       >
-        <ShadcnTable>
-          <TableHeader className="sticky top-0 bg-background">
+        <ShadcnTable className="w-full table-fixed">
+          <TableHeader className="top-0 bg-background">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className="relative"
-                    style={{ width: header.getSize() }}
+                    className="sticky top-0 z-10 bg-background"
+                    style={{
+                      width: header.getSize(),
+                    }}
                   >
                     {header.isPlaceholder ? null : (
                       <div
                         className={
                           header.column.getCanSort()
-                            ? "flex items-center gap-2 cursor-pointer select-none hover:text-foreground"
-                            : "flex items-center gap-2"
+                            ? "flex items-center justify-center gap-2 cursor-pointer select-none hover:text-foreground"
+                            : "flex items-center justify-center gap-2"
                         }
                         onClick={header.column.getToggleSortingHandler()}
                       >
@@ -141,7 +143,7 @@ export const TableVirtualizer = ({
               return (
                 <TableRow
                   key={row.id}
-                  className="absolute w-full hover:bg-muted/50"
+                  className="absolute hover:bg-muted/50"
                   style={{
                     transform: `translateY(${virtualRow.start}px)`,
                   }}
@@ -149,7 +151,9 @@ export const TableVirtualizer = ({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      style={{ width: cell.column.getSize() }}
+                      style={{
+                        width: cell.column.getSize(),
+                      }}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

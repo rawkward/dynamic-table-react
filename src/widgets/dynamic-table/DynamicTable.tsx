@@ -54,7 +54,7 @@ export const DynamicTable = () => {
 
   if (error) {
     return (
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle className="text-destructive">
             Error Loading Users
@@ -73,14 +73,12 @@ export const DynamicTable = () => {
   }
 
   return (
-    <Card className="w-full">
+    <Card>
       <CardHeader>
         <CardTitle>Users Directory</CardTitle>
-        <CardDescription>
-          Browse and sort through user profiles with infinite scroll
-        </CardDescription>
+
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent>
         <TableVirtualizer
           table={table}
           totalCount={totalCount}
