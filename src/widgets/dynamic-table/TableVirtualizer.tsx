@@ -44,7 +44,7 @@ export const TableVirtualizer = ({
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => tableContainerRef.current,
-    estimateSize: () => 60,
+    estimateSize: () => 80,
     overscan: 10,
   });
 
@@ -67,6 +67,10 @@ export const TableVirtualizer = ({
     );
   }
 
+  const totalTableWidth = table.getAllColumns().reduce((acc, column) => {
+    return acc + (column.getSize() || 150);
+  }, 0);
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between text-sm text-muted-foreground">
@@ -85,43 +89,53 @@ export const TableVirtualizer = ({
         ref={tableContainerRef}
         className="h-[600px] overflow-auto border rounded-md"
       >
-        <ShadcnTable className="w-full table-fixed">
-          <TableHeader className="top-0 bg-background">
+        <ShadcnTable
+          className="table-fixed border-collapse"
+          style={{
+            width: `${totalTableWidth}px`,
+            minWidth: `${totalTableWidth}px`,
+          }}
+        >
+          <TableHeader className="sticky top-0 z-10 bg-background">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className="sticky top-0 z-10 bg-background"
+                    className="sticky top-0 z-10 bg-background border-r border-border"
                     style={{
-                      width: header.getSize(),
+                      width: `${header.getSize()}px`,
+                      minWidth: `${header.getSize()}px`,
+                      maxWidth: `${header.getSize()}px`,
                     }}
                   >
                     {header.isPlaceholder ? null : (
                       <div
                         className={
                           header.column.getCanSort()
-                            ? "flex items-center justify-center gap-2 cursor-pointer select-none hover:text-foreground"
-                            : "flex items-center justify-center gap-2"
+                            ? "flex items-center justify-center gap-2 cursor-pointer select-none hover:text-foreground px-2"
+                            : "flex items-center justify-center gap-2 px-2"
                         }
                         onClick={header.column.getToggleSortingHandler()}
                       >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                        <span className="text-xs font-medium text-center leading-tight">
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                        </span>
                         {header.column.getCanSort() && (
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="h-6 w-6 p-0"
+                            className="h-6 w-6 p-0 flex-shrink-0"
                           >
                             {header.column.getIsSorted() === "desc" ? (
-                              <ChevronDown className="h-4 w-4" />
+                              <ChevronDown className="h-3 w-3" />
                             ) : header.column.getIsSorted() === "asc" ? (
-                              <ChevronUp className="h-4 w-4" />
+                              <ChevronUp className="h-3 w-3" />
                             ) : (
-                              <ChevronsUpDown className="h-4 w-4" />
+                              <ChevronsUpDown className="h-3 w-3" />
                             )}
                           </Button>
                         )}
@@ -143,22 +157,28 @@ export const TableVirtualizer = ({
               return (
                 <TableRow
                   key={row.id}
-                  className="absolute hover:bg-muted/50"
+                  className="absolute hover:bg-muted/50 border-b border-border"
                   style={{
                     transform: `translateY(${virtualRow.start}px)`,
+                    height: `${virtualRow.size}px`,
                   }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
+                      className="p-2 align-top"
                       style={{
-                        width: cell.column.getSize(),
+                        width: `${cell.column.getSize()}px`,
+                        minWidth: `${cell.column.getSize()}px`,
+                        maxWidth: `${cell.column.getSize()}px`,
                       }}
                     >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+                      <div className="w-full h-full overflow-hidden">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </div>
                     </TableCell>
                   ))}
                 </TableRow>

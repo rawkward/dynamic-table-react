@@ -15,6 +15,8 @@ export const generateColumns = (
         header: formatHeader(key),
         size: getColumnWidth(key),
         enableSorting: true,
+        minSize: getColumnWidth(key),
+        maxSize: getColumnWidth(key),
         cell: ({ row }) => {
           const value = row.getValue(key);
           return formatCellValue(key, value as string | number | Date);
@@ -34,17 +36,18 @@ function getColumnWidth(key: string): number {
     user_id: 80,
     first_name: 120,
     last_name: 120,
-    email: 200,
+    email: 220,
     age: 80,
-    country: 120,
+    gender: 100,
+    country: 130,
     city: 120,
-    interests: 180,
+    interests: 100,
     relationship_status: 140,
-    education_level: 140,
-    job_title: 160,
+    education_level: 130,
+    job_title: 180,
     profile_created_date: 120,
     last_login_date: 120,
-    profile_picture_url: 60,
+    profile_picture_url: 80,
   };
 
   return widthMap[key] || 150;
@@ -62,13 +65,13 @@ function formatCellValue(
     try {
       const date = new Date(value);
       return (
-        <span className="text-sm">
+        <div className="text-sm leading-tight">
           {date.toLocaleDateString("en-US", {
             year: "numeric",
             month: "short",
             day: "numeric",
           })}
-        </span>
+        </div>
       );
     } catch {
       return <span className="text-muted-foreground">Invalid date</span>;
@@ -77,12 +80,15 @@ function formatCellValue(
 
   if (key === "email") {
     return (
-      <a
-        href={`mailto:${value}`}
-        className="text-primary hover:underline text-sm"
-      >
-        {String(value)}
-      </a>
+      <div className="text-sm leading-tight break-all">
+        <a
+          href={`mailto:${value}`}
+          className="text-primary hover:underline"
+          title={String(value)}
+        >
+          {String(value)}
+        </a>
+      </div>
     );
   }
 
@@ -94,42 +100,57 @@ function formatCellValue(
       divorced:
         "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
       widowed: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300",
+      "in a relationship":
+        "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
     };
 
     const colorClass =
       statusColors[String(value).toLowerCase()] || "bg-gray-100 text-gray-800";
 
     return (
-      <Badge variant="secondary" className={colorClass}>
-        {String(value)}
-      </Badge>
+      <div className="flex justify-center">
+        <Badge
+          variant="secondary"
+          className={`${colorClass} text-xs px-2 py-1`}
+        >
+          {String(value)}
+        </Badge>
+      </div>
     );
   }
 
   if (key === "age") {
-    return <span className="font-medium">{String(value)} y/o</span>;
+    return <div className="font-medium text-sm">{String(value)} y/o</div>;
   }
 
   if (key === "profile_picture_url") {
-    return value ? (
-      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-        <span className="text-xs font-medium">IMG</span>
-      </div>
-    ) : (
-      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-        <span className="text-xs text-muted-foreground">—</span>
+    return (
+      <div className="flex justify-center">
+        {value ? (
+          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+            <span className="text-xs font-medium">IMG</span>
+          </div>
+        ) : (
+          <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+            <span className="text-xs text-muted-foreground">—</span>
+          </div>
+        )}
       </div>
     );
   }
 
   const stringValue = String(value);
-  if (stringValue.length > 30) {
+
+  if (stringValue.length > 20) {
     return (
-      <span title={stringValue} className="text-sm">
-        {stringValue.substring(0, 27)}...
-      </span>
+      <div
+        className="text-sm leading-tight break-words hyphens-auto"
+        title={stringValue}
+      >
+        {stringValue}
+      </div>
     );
   }
 
-  return <span className="text-sm">{stringValue}</span>;
+  return <div className="text-sm leading-tight">{stringValue}</div>;
 }

@@ -21,16 +21,17 @@ const PAGE_SIZE = 50;
 export const DynamicTable = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const { data, fetchNextPage, isFetching, isLoading, error, hasNextPage } = useInfiniteQuery({
-    queryKey: ["users", sorting],
-    queryFn: ({ pageParam = 0 }) =>
-      fetchUsers(pageParam * PAGE_SIZE, PAGE_SIZE, sorting),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.data.length < PAGE_SIZE) return undefined;
-      return allPages.length;
-    },
-  });
+  const { data, fetchNextPage, isFetching, isLoading, error, hasNextPage } =
+    useInfiniteQuery({
+      queryKey: ["users", sorting],
+      queryFn: ({ pageParam = 0 }) =>
+        fetchUsers(pageParam * PAGE_SIZE, PAGE_SIZE, sorting),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, allPages) => {
+        if (lastPage.data.length < PAGE_SIZE) return undefined;
+        return allPages.length;
+      },
+    });
 
   const columns = useMemo(() => {
     return generateColumns(data?.pages[0]?.data[0]);
@@ -64,9 +65,7 @@ export const DynamicTable = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground">
-            {error.message}
-          </p>
+          <p className="text-sm text-muted-foreground">{error.message}</p>
         </CardContent>
       </Card>
     );
@@ -76,7 +75,6 @@ export const DynamicTable = () => {
     <Card>
       <CardHeader>
         <CardTitle>Users Directory</CardTitle>
-
       </CardHeader>
       <CardContent>
         <TableVirtualizer
