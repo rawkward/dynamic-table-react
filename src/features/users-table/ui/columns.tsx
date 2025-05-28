@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { User } from "@/entities/user/types.ts"
-import { Badge } from "@/shared/ui/components/Badge/badge.tsx";
+import type { User } from "@/entities/user/types.ts";
+import type { ReactNode } from "react";
 
 export const generateColumns = (
   sampleData?: Partial<User>,
@@ -19,7 +19,7 @@ export const generateColumns = (
         maxSize: getColumnWidth(key),
         cell: ({ row }) => {
           const value = row.getValue(key);
-          return formatCellValue(key, value as string | number | Date);
+          return formatCellValue(key, value as string | number);
         },
       };
 
@@ -36,9 +36,9 @@ function getColumnWidth(key: string): number {
     user_id: 80,
     first_name: 120,
     last_name: 120,
-    email: 220,
     age: 80,
     gender: 100,
+    email: 220,
     country: 130,
     city: 120,
     interests: 100,
@@ -55,8 +55,8 @@ function getColumnWidth(key: string): number {
 
 function formatCellValue(
   key: string,
-  value: string | number | Date,
-): React.ReactNode {
+  value: string | number,
+): ReactNode {
   if (value === null || value === undefined) {
     return <span className="text-muted-foreground">—</span>;
   }
@@ -66,9 +66,9 @@ function formatCellValue(
       const date = new Date(value);
       return (
         <div className="text-sm leading-tight">
-          {date.toLocaleDateString("en-US", {
+          {date.toLocaleDateString("en-UK", {
             year: "numeric",
-            month: "short",
+            month: "numeric",
             day: "numeric",
           })}
         </div>
@@ -88,53 +88,6 @@ function formatCellValue(
         >
           {String(value)}
         </a>
-      </div>
-    );
-  }
-
-  if (key === "relationship_status") {
-    const statusColors: Record<string, string> = {
-      single: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-      married:
-        "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
-      divorced:
-        "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-      widowed: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300",
-      "in a relationship":
-        "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
-    };
-
-    const colorClass =
-      statusColors[String(value).toLowerCase()] || "bg-gray-100 text-gray-800";
-
-    return (
-      <div className="flex justify-center">
-        <Badge
-          variant="secondary"
-          className={`${colorClass} text-xs px-2 py-1`}
-        >
-          {String(value)}
-        </Badge>
-      </div>
-    );
-  }
-
-  if (key === "age") {
-    return <div className="font-medium text-sm">{String(value)} y/o</div>;
-  }
-
-  if (key === "profile_picture_url") {
-    return (
-      <div className="flex justify-center">
-        {value ? (
-          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-            <span className="text-xs font-medium">IMG</span>
-          </div>
-        ) : (
-          <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-            <span className="text-xs text-muted-foreground">—</span>
-          </div>
-        )}
       </div>
     );
   }

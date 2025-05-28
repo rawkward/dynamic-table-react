@@ -105,8 +105,6 @@ export const TableVirtualizer = ({
                     className="sticky top-0 z-10 bg-background"
                     style={{
                       width: `${header.getSize()}px`,
-                      minWidth: `${header.getSize()}px`,
-                      maxWidth: `${header.getSize()}px`,
                     }}
                   >
                     {header.isPlaceholder ? null : (
@@ -169,8 +167,6 @@ export const TableVirtualizer = ({
                       className="p-2 align-top"
                       style={{
                         width: `${cell.column.getSize()}px`,
-                        minWidth: `${cell.column.getSize()}px`,
-                        maxWidth: `${cell.column.getSize()}px`,
                       }}
                     >
                       <div className="w-full h-full overflow-hidden">
