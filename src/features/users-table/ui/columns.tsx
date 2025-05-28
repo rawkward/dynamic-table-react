@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { User } from "@/shared/api/users.ts";
+import type { User } from "@/entities/user/types.ts"
 import { Badge } from "@/shared/ui/components/Badge/badge.tsx";
 
 export const generateColumns = (
@@ -144,7 +144,7 @@ function formatCellValue(
   if (stringValue.length > 20) {
     return (
       <div
-        className="text-sm leading-tight break-words hyphens-auto"
+        className="text-sm leading-tight text-ellipsis hyphens-auto"
         title={stringValue}
       >
         {stringValue}

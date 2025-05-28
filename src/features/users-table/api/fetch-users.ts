@@ -1,17 +1,6 @@
 import type { SortingState } from "@tanstack/react-table";
 import { api } from "@/shared/api/instance.ts";
-
-export type User = {
-  user_id: number;
-  [key: string]: string | number;
-};
-
-export type UsersResponse = {
-  data: User[];
-  meta: {
-    totalRowCount: number;
-  };
-};
+import type { UsersResponse } from "@/entities/user/types.ts";
 
 export const fetchUsers = async (
   start: number,

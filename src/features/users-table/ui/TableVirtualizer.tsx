@@ -2,7 +2,7 @@ import { useVirtualizer, type VirtualItem } from "@tanstack/react-virtual";
 import type { Table, Row } from "@tanstack/react-table";
 import { useRef, useEffect } from "react";
 import { flexRender } from "@tanstack/react-table";
-import type { User, UsersResponse } from "@/shared/api/users.ts";
+import type { User, UsersResponse } from "@/entities/user/types.ts";
 import type {
   FetchNextPageOptions,
   InfiniteData,
@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@/shared/ui/components/Table/table.tsx";
 import { ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
-import { Button } from "@/shared/ui/components/Button/button";
+import { Button } from "@/shared/ui/components/Button/button.tsx";
 
 type TableVirtualizerProps = {
   table: Table<User>;
@@ -102,7 +102,7 @@ export const TableVirtualizer = ({
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className="sticky top-0 z-10 bg-background border-r border-border"
+                    className="sticky top-0 z-10 bg-background"
                     style={{
                       width: `${header.getSize()}px`,
                       minWidth: `${header.getSize()}px`,

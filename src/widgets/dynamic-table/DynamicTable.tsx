@@ -5,9 +5,9 @@ import {
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { TableVirtualizer } from "./TableVirtualizer";
-import { type User, fetchUsers } from "@/shared/api/users.ts";
-import { generateColumns } from "./columns";
+import { TableVirtualizer } from "../../features/users-table/ui/TableVirtualizer.tsx";
+import type { User } from "@/entities/user/types.ts";
+import { generateColumns } from "../../features/users-table/ui/columns.tsx";
 import {
   Card,
   CardContent,
@@ -15,6 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/ui/components/Card/card.tsx";
+import { fetchUsers } from "@/features/users-table/api/fetch-users.ts";
 
 const PAGE_SIZE = 50;
 
@@ -74,7 +75,7 @@ export const DynamicTable = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Users Directory</CardTitle>
+        <CardTitle>Users Table</CardTitle>
       </CardHeader>
       <CardContent>
         <TableVirtualizer
