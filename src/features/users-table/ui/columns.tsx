@@ -6,25 +6,25 @@ import { formatHeader } from "@/shared/lib/utils.ts";
 export const generateColumns = (
   sampleData?: Partial<User>,
 ): ColumnDef<User>[] => {
-  if (!sampleData) return [];
+  if (!sampleData)
+    return [];
 
-  return Object.keys(sampleData)
-    .map((key) => {
-      const column: ColumnDef<User> = {
-        accessorKey: key,
-        header: formatHeader(key),
-        size: getColumnWidth(key),
-        enableSorting: true,
-        minSize: getColumnWidth(key),
-        maxSize: getColumnWidth(key),
-        cell: ({ row }) => {
-          const value = row.getValue(key);
-          return formatCellValue(key, value as string | number);
-        },
-      };
+  return Object.keys(sampleData).map((key) => {
+    const column: ColumnDef<User> = {
+      accessorKey: key,
+      header: formatHeader(key),
+      size: getColumnWidth(key),
+      enableSorting: true,
+      minSize: getColumnWidth(key),
+      maxSize: getColumnWidth(key),
+      cell: ({ row }) => {
+        const value = row.getValue(key);
+        return formatCellValue(key, value as string | number);
+      },
+    };
 
-      return column;
-    });
+    return column;
+  });
 };
 
 function getColumnWidth(key: string): number {

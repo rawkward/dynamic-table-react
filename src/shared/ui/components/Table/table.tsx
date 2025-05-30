@@ -3,9 +3,14 @@ import { cn } from "@/shared/lib/utils.ts";
 
 function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (
-    <div data-slot="table-container" className="relative w-full text-center">
+    <div
+      data-slot="table-container"
+      role="table"
+      className="relative w-full text-center"
+    >
       <table
         data-slot="table"
+        role="table"
         className={cn(
           "w-full caption-bottom text-sm border-collapse",
           className,

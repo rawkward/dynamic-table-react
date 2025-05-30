@@ -4,7 +4,7 @@ import {endpoint} from "@/shared/api/config.ts";
 
 export type CreateUserPayload = Omit<
   User,
-  "user_id" | "profile_created_date" | "last_login_date" | "posts_count"
+  "id" | "profile_created_date" | "last_login_date" | "posts_count"
 > & {
   [key: string]: string | number | undefined;
 };

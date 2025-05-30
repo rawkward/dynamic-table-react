@@ -16,6 +16,7 @@ export const fetchUsers = async (
       _order: sorting.map((s) => (s.desc ? "desc" : "asc")).join(","),
     },
   });
+
   return {
     data: response.data,
     meta: {

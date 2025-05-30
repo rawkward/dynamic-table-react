@@ -47,6 +47,11 @@ export const DynamicTable = () => {
       },
     });
 
+  console.log('[TEST DEBUG] isLoading:', isLoading);
+  console.log('[TEST DEBUG] isFetching:', isFetching);
+  console.log('[TEST DEBUG] error:', error);
+  console.log('[TEST DEBUG] data from useInfiniteQuery:', JSON.stringify(data, null, 2));
+
   const sampleUserData = useMemo(() => data?.pages[0]?.data[0], [data?.pages]);
 
   const columns = useMemo(() => {
@@ -96,7 +101,7 @@ export const DynamicTable = () => {
   };
 
   return (
-    <Card data-testid="dynamic-table">
+    <Card>
       <CardHeader className="flex-row items-center justify-between">
         <div>
           <CardTitle>Users Table</CardTitle>
