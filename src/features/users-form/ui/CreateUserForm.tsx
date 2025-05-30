@@ -70,6 +70,7 @@ export const CreateUserForm = ({
   };
 
   const onSubmit = (values: FormValues) => {
+
     const currentDate = new Date().toISOString();
 
     const payload: CreateUserPayload = {

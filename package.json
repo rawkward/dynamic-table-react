@@ -23,6 +23,7 @@
     "@tanstack/react-query-devtools": "^5.77.2",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.13.9",
+    "@testing-library/user-event": "^14.6.1",
     "autoprefixer": "^10.4.21",
     "axios": "^1.9.0",
     "class-variance-authority": "^0.7.1",

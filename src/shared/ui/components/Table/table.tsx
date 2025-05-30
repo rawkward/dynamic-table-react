@@ -5,7 +5,6 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (
     <div
       data-slot="table-container"
-      role="table"
       className="relative w-full text-center"
     >
       <table

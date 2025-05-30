@@ -23,7 +23,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/shared/ui/components/Dialog/dialog"; // Предполагаемый путь
+} from "@/shared/ui/components/Dialog/dialog";
 import { CreateUserForm } from "@/features/users-form/ui/CreateUserForm.tsx";
 import { generateFormFieldConfigs } from "@/features/users-form/form-config.ts";
 import type { FormFieldSchemaConfig } from "@/features/users-form/form-config.ts";

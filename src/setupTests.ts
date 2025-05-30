@@ -2,6 +2,7 @@ import "@testing-library/jest-dom/vitest";
 import { vi } from "vitest";
 import { server } from "./mocks/server";
 import { queryClient } from "@/shared/api/query-client";
+import { resetMockUsers } from "@/mocks/handlers.ts";
 
 global.ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
@@ -52,6 +53,17 @@ beforeAll(() => {
     },
   });
 
+  if (window.HTMLElement) {
+    HTMLElement.prototype.hasPointerCapture =
+      HTMLElement.prototype.hasPointerCapture || vi.fn();
+    HTMLElement.prototype.setPointerCapture =
+      HTMLElement.prototype.setPointerCapture || vi.fn();
+    HTMLElement.prototype.releasePointerCapture =
+      HTMLElement.prototype.releasePointerCapture || vi.fn();
+    HTMLElement.prototype.scrollIntoView =
+      HTMLElement.prototype.scrollIntoView || vi.fn();
+  }
+
   try {
     Object.defineProperty(HTMLElement.prototype, "offsetHeight", {
       configurable: true,
@@ -84,6 +96,7 @@ beforeAll(() => {
 afterEach(() => {
   server.resetHandlers();
   queryClient.clear();
+  resetMockUsers();
 });
 
 afterAll(() => {
