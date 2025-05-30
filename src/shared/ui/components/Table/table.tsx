@@ -10,7 +10,6 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
     >
       <table
         data-slot="table"
-        role="table"
         className={cn(
           "w-full caption-bottom text-sm border-collapse",
           className,

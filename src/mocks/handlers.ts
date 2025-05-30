@@ -43,14 +43,12 @@ const mockUsers: User[] = [
 
 export const handlers = [
   http.get("http://localhost:3000/usersLong", ({ request }) => {
-    console.log("[MSW] Intercepted GET request:", request.url);
     const url = new URL(request.url);
     const _start = Number(url.searchParams.get("_start")) || 0;
     const _limit = Number(url.searchParams.get("_limit")) || 10;
 
     const paginatedData = mockUsers.slice(_start, _start + _limit);
 
-    console.log("[MSW] Responding with data (array):", paginatedData);
     return HttpResponse.json(paginatedData, {
       headers: {
         "x-total-count": String(mockUsers.length),

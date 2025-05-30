@@ -7,16 +7,13 @@ const createFreshTestQueryClient = () =>
     defaultOptions: {
       queries: {
         retry: false,
-        gcTime: 0, // Для тестов можно установить в 0, чтобы не было долгого кеширования
+        gcTime: 0,
         staleTime: 0,
       },
-      mutations: { // Добавим для мутаций на всякий случай
-        retry: false,
-      }
     },
   });
 
-const renderWithFreshClient = (
+const renderWithProviders = (
   ui: ReactElement,
   options?: Omit<RenderOptions, "wrapper">,
 ) => {
@@ -27,6 +24,5 @@ const renderWithFreshClient = (
   return render(ui, { wrapper: Wrapper, ...options });
 };
 
-
 export * from "@testing-library/react";
-export { renderWithFreshClient as renderWithProviders };
+export { renderWithProviders };

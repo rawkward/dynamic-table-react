@@ -6,11 +6,13 @@ import { formatHeader } from "@/shared/lib/utils.ts";
 export const generateColumns = (
   sampleData?: Partial<User>,
 ): ColumnDef<User>[] => {
-  if (!sampleData)
+  if (!sampleData) {
     return [];
+  }
 
   return Object.keys(sampleData).map((key) => {
     const column: ColumnDef<User> = {
+      id: key,
       accessorKey: key,
       header: formatHeader(key),
       size: getColumnWidth(key),
@@ -22,7 +24,6 @@ export const generateColumns = (
         return formatCellValue(key, value as string | number);
       },
     };
-
     return column;
   });
 };
