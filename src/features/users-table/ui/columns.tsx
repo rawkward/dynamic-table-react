@@ -1,6 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { User } from "@/entities/user/types.ts";
 import type { ReactNode } from "react";
+import { formatHeader } from "@/shared/lib/utils.ts";
 
 export const generateColumns = (
   sampleData?: Partial<User>,
@@ -27,10 +28,6 @@ export const generateColumns = (
     });
 };
 
-function formatHeader(key: string): string {
-  return key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
-}
-
 function getColumnWidth(key: string): number {
   const widthMap: Record<string, number> = {
     user_id: 80,
@@ -53,10 +50,7 @@ function getColumnWidth(key: string): number {
   return widthMap[key] || 150;
 }
 
-function formatCellValue(
-  key: string,
-  value: string | number,
-): ReactNode {
+function formatCellValue(key: string, value: string | number): ReactNode {
   if (value === null || value === undefined) {
     return <span className="text-muted-foreground">—</span>;
   }
