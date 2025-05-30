@@ -27,7 +27,7 @@ import {
 import {
   createUser,
   type CreateUserPayload,
-} from "@/features/users-table/api/create-user.ts";
+} from "@/features/users-form/api/create-user.ts";
 import {endpoint} from "@/shared/api/config.ts";
 
 type CreateUserFormProps = {

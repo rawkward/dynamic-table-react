@@ -96,7 +96,7 @@ export const DynamicTable = () => {
   };
 
   return (
-    <Card>
+    <Card data-testid="dynamic-table">
       <CardHeader className="flex-row items-center justify-between">
         <div>
           <CardTitle>Users Table</CardTitle>
