@@ -15,7 +15,7 @@ export type FormFieldSchemaConfig = {
 };
 
 const EXCLUDED_FORM_FIELDS = [
-  "user_id",
+  "id",
   "profile_created_date",
   "last_login_date",
   "posts_count",

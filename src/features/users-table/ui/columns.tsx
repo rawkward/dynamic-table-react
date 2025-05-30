@@ -9,7 +9,6 @@ export const generateColumns = (
   if (!sampleData) return [];
 
   return Object.keys(sampleData)
-    .filter((key) => !"id".includes(key))
     .map((key) => {
       const column: ColumnDef<User> = {
         accessorKey: key,
@@ -30,7 +29,7 @@ export const generateColumns = (
 
 function getColumnWidth(key: string): number {
   const widthMap: Record<string, number> = {
-    user_id: 80,
+    id: 80,
     first_name: 120,
     last_name: 120,
     age: 80,

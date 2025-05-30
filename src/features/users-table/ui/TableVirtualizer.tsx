@@ -32,7 +32,6 @@ type TableVirtualizerProps = {
 
 export const TableVirtualizer = ({
   table,
-  totalCount,
   fetchMore,
   isLoading,
   hasNextPage,
@@ -74,9 +73,6 @@ export const TableVirtualizer = ({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between text-sm text-muted-foreground">
-        <div>
-          Showing {rows.length} of {totalCount} users
-        </div>
         {isFetching && (
           <div className="flex items-center gap-2">
             <div className="animate-spin w-4 h-4 border-2 border-primary border-t-transparent rounded-full" />
