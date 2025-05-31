@@ -20012,21 +20012,6 @@
       "interests": "et",
       "relationship_status": "Engaged",
       "id": 1000
-    },
-    {
-      "first_name": "htyh",
-      "last_name": "htht",
-      "age": 32,
-      "email": "d@m.com",
-      "gender": "Female",
-      "country": "fe",
-      "city": "fff",
-      "interests": "ewew",
-      "relationship_status": "Single",
-      "profile_created_date": "2025-05-30T13:14:59.684Z",
-      "last_login_date": "2025-05-30T13:14:59.684Z",
-      "posts_count": 0,
-      "id": 1001
     }
   ],
   "usersLong": [
@@ -37029,57 +37014,6 @@
       "last_login_date": "11/19/2021",
       "posts_count": 149,
       "id": 1000
-    },
-    {
-      "first_name": "dfd",
-      "last_name": "aaa",
-      "age": 21,
-      "email": "bab@ba.com",
-      "gender": "Female",
-      "country": "dwd",
-      "city": "asa",
-      "interests": "dde",
-      "relationship_status": "Single",
-      "education_level": "Associate's Degree",
-      "job_title": "efef",
-      "profile_created_date": "2025-05-30T12:45:28.395Z",
-      "last_login_date": "2025-05-30T12:45:28.395Z",
-      "posts_count": 0,
-      "id": 1001
-    },
-    {
-      "first_name": "1",
-      "last_name": "2",
-      "age": 3,
-      "email": "4@list.ru",
-      "gender": "Female",
-      "country": "3",
-      "city": "5",
-      "interests": "1",
-      "relationship_status": "Engaged",
-      "education_level": "Doctorate",
-      "job_title": "3",
-      "profile_created_date": "2025-05-30T14:21:25.052Z",
-      "last_login_date": "2025-05-30T14:21:25.052Z",
-      "posts_count": 0,
-      "id": 1002
-    },
-    {
-      "first_name": "fdf",
-      "last_name": "ff",
-      "age": 32,
-      "email": "d@m.ocm",
-      "gender": "Female",
-      "country": "de",
-      "city": "ff",
-      "interests": "efe",
-      "relationship_status": "Married",
-      "education_level": "Associate's Degree",
-      "job_title": "fee",
-      "profile_created_date": "2025-05-30T14:33:47.891Z",
-      "last_login_date": "2025-05-30T14:33:47.891Z",
-      "posts_count": 0,
-      "id": 1003
     }
   ]
 }
